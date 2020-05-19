@@ -1,0 +1,17 @@
+{
+    "size": 15,
+    "level": 2,
+    "number_of_mine": "default", 
+    "color": {
+        "background": "#cd5c5c",
+        "boom": "#e74c3c",
+        "revealed_blank": "#eaeded",
+        "flag": "#5b2c6f",
+        "text": "#000000"
+    },
+    "font": {
+        "number_font": "arialblack",
+        "text_font": "lucidaconsole"
+    },
+    "player": "Ethan"
+}
