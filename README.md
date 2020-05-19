@@ -6,8 +6,11 @@ Currently working on this project, writing a introduction book to python with th
 To run these games, you need to have pygame installed first.
 
 To install pygame
+
 sudo apt update  
 sudo apt install python3-pygame
 
+
 To run the game
+
 python3 <game_name>.py
