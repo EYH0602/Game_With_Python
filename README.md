@@ -7,7 +7,7 @@ To run these games, you need to have pygame installed first.
 
 To get these code:
 
-git clone https://github.com/EYH0602/Game_With_Python
+$ git clone https://github.com/EYH0602/Game_With_Python
 
 
 To install pygame:
