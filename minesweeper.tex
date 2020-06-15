@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage[UTF8]{ctex}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings,lstautogobble}
+\usepackage{xcolor}
+
+% code settings
+\lstset{
+    language=Python,
+    basicstyle=\scriptsize\ttfamily,
+    commentstyle=\ttfamily\itshape\color{gray},
+    stringstyle=\ttfamily,
+    showstringspaces=false,
+    breaklines=true,
+    frameround=ffff,
+    frame=single,
+    rulecolor=\color{black},
+    autogobble=true
+}
+
+% title
+\title{第7章 Minesweeper}
+\author{Ethan He}
+\date{}
+
+\begin{document}
+    \maketitle
+    前面几张已经介绍过Pygame模块的基本使用方法，本章将会把重点放在实现扫雷游戏的Python语法和算法。
+    在第6章 Connect 4中，我们介绍了矩阵（二维数组）的结构和基本算法，在这章则会接触矩阵的基本搜素算法。
+    除此之外，本章将会介绍一些在应用方便的基础知识，比如应用广泛的JSON文件和正则表达式。%和匿名函数
+    
+    我们在Minesweeper游戏将要涉及的几个功能如下:
+    \begin{itemize}
+        \item 元组
+        \item Pygame 通过鼠标的人机交互
+        \item 文件处理
+        \item JSON文件
+        \item 正则表达式 Regular Expression
+        % \item 匿名函数 Lambda Expression
+        \item 二维数组的深度优先搜索
+    \end{itemize}
+    
+    \section*{7.1 元组 Tuple}
+        \subsection*{7.1.1 Tuple 基本语法}
+            元组是一种常用的对象类型，很多高层编程语言都有它的身影。
+            在C++中他叫作pair或是set，在Java中它叫做Tuple。元组的作用其实很简单：表示一组\textbf{相关的}数据。
+            等等，表示一组数据？为什么这句话听起来与第6章学习的list如此相似？
+            是的，Tuple这种数据类型的应用场景和方式与list的确有很多相似的地方。来看看语法：
+            \begin{lstlisting}
+                fruit_tuple = ('apple', 'banana', 'orange') # a tuple of fruits
+                fruit_list = ['apple', 'banana', 'orange']  # a list of fruits
+            \end{lstlisting}
+
+            Python作为一种高级语言，一个元组所包含的元素类型可以不一样, 也可以有多种创建方法。
+            在创建元组的时候，Python允许我们使用()来表示这组数据的类型为元组，就像[]表示一组数据为列表一样。
+            与此同时，Python同样允许我们不写()，同样表示元组。
+            然而，作者极其不推荐这种写法，因为很多时候这种创建方式的表达意义并不明确，会带来很差的可读性。
+            要时刻记住，写代码的首要目的是让人能看懂，其次才是让计算机运行
+            \begin{lstlisting}
+                tup1 = ('apple', 50, 'banana', 16.7)    # 包含不同类型的元素
+                tup2 = 'apple', 50, 'banana', 16.7      # 不是使用()创建
+                tup3 = ()   # 创建空元组
+                tup4 = ('delicious',)   # 创建只有一个元素的元组，有逗号
+                tup5 = ('delicious')    # 创建只有一个元素的元组，无逗号
+
+                print(tup1)
+                print(tup2)
+                print(tup3)
+                print(tup4)
+                print(tup5)
+            \end{lstlisting}
+
+            依次打印tup1-tup4, 看看这段代码的运行结果是什么。从运行结果可以看出，tup4和tup5的打印结果
+            有很大的区别。如果元素只有一个元素，请务必记住要在元素后加上都好','，否则Python解释器会把你的
+            意思理解为字符串，如同tup5的运行结果：
+            \begin{lstlisting}
+                ('apple', 50, 'banana', 16.7)
+                ('apple', 50, 'banana', 16.7)
+                ()
+                ('delicious',)
+                delicious
+            \end{lstlisting}
+
+            在了解如何创建元组后，我们需要做的就是访问元组。
+            访问元组元素的方式与列表类似，通过\lstinline{objName[index]}的方式来表示元组中的元素。
+            \begin{lstlisting}
+                tup = ('apple', 'banana', 'orange', 'peach') # a tuple of fruits
+                print(tup)
+                print(tup[0])   # apple
+                print(tup[-2])  # orange
+                print(tup[1:])  # ('banana', 'orange', 'peach')
+
+                for fruit in tuo:
+                    print(fruit)
+            \end{lstlisting}
+            运行结果如下：
+            \begin{lstlisting}
+                ('apple', 'banana', 'orange')
+                apple
+                orange
+                ('banana', 'orange', 'peach')
+                apple
+                banana
+                orange
+                peach
+            \end{lstlisting}
+
+            除了简单的创建和访问之外，元组类还支持一些列的基础计算。
+            Python允许我们使用‘+’操作符来合并两个元组，'*'操作符来复制元组的元素：
+            \begin{lstlisting}
+                tup1 = (1, 'a', 2)
+                tup2 = ('b', 3, 'c')
+                tup3 = tup1 + tup2
+                print(tup3) # (1, 'a', 2, 'b', 3, 'c')
+
+                tup4 = ('abc',)*3
+                print(tup4) # ('abc', 'abc', 'abc')
+            \end{lstlisting}
+
+            元组最为Python的一个类，当然要有成员函数。
+            Python给元组类定义了五个最常用的成员函数：
+            \begin{itemize}
+                \item len(tuple)
+                \item max(tuple)
+                \item min(tuple)
+                \item tuple(list)
+            \end{itemize}
+            \begin{lstlisting}
+                tup1 = (1, 2, 3)
+                tup2 = (1, 2, 3)
+                list1 = [4, 5, 6]
+                
+                print(len(tup1))    # 3
+                print(max(tup1))    # 3
+                print(min(tup1))    # 1
+                print(tuple(list1)) # (4, 5, 6)
+            \end{lstlisting}
+
+        \subsection*{7.1.2 Tuple与List的相同点}
+
+
+        \subsection*{7.1.2 Tuple与List的区别}
+
+
+
+
+
+    
+    \section*{7.2 Pygame 通过鼠标的人机交互}
+        在上一章，我们学习了Pygame模块的基础功能，比如设置游戏屏幕，键盘交互，绘制图形等。
+        在这一章，因为扫雷不能用只用键盘来玩，我们将要学习如何通过鼠标点击与计算机交互。
+
+    \section*{7.3 文件处理}
+    \section*{7.4 JSON}
+    \section*{7.5 正则表达式 Regular Expression}
+    \section*{7.6 二维数组的深度优先搜索}
+    \section*{7.7 Minesweeper 游戏编写}
+
+
+        
+\end{document}
