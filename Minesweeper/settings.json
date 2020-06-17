@@ -1,7 +1,7 @@
 {
     "size": 15,
     "level": 2,
-    "number_of_mine": "default", 
+    "number of mine": "default", 
     "color": {
         "background": "#cd5c5c",
         "boom": "#e74c3c",

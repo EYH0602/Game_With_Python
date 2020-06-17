@@ -1,8 +1,6 @@
-tup1 = (1, 2, 3)
-tup2 = (1, 2, 3)
-list1 = [4, 5, 6]
 
-print(len(tup1))
-print(max(tup1))
-print(min(tup1))
-print(tuple(list1))
+list1 = ['aaa', 'bbb', 1, 2, 'ccc']
+print(type(list[1]))
+print(type(list[2]))
+
+

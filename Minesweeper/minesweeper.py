@@ -17,10 +17,10 @@ def getBoard(level):
         board.append(line)
     
     # 埋炸弹
-    if func.setting["number_of_mine"] == "default":
+    if func.setting["number of mine"] == "default":
         numMine = func.size*level
     else:
-        numMine = func.setting["number_of_mine"]
+        numMine = func.setting["number of mine"]
     i = 0
     while i < numMine:
         x = random.randint(0,func.size-1)
