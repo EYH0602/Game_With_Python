@@ -372,10 +372,80 @@ thisCourse = Course('Python Programming in Games', '123456', \
 }
 ```
 
-
 ### 7.3.3 编写Minesweeper游戏的JSON设置文件
+了解完JSON文件的写法和作用后，我们就需要动手设计Minesweeper游戏的设置文件啦。
+在开始编写之前，要首先搞清楚游戏的基础设计:
+1. 游戏屏幕为一个正方向，我们需要size代表游戏屏幕的宽度和高度
+2. 地雷数量。拥有两种模式:
+    1. 如果地雷数量是一个整数，则设置这么多地雷
+    2. 如果地雷数量是default，游戏将会根据size和level自行计算地雷数量
+3. 因为2.2，我们需要level
+4. 颜色设置
+    * 游戏屏幕的背景颜色
+    * 地雷被引爆后的颜色
+    * 以证实为安全地区的颜色
+    * 右键插的旗子颜色
+    * 文字(数字)的颜色
+5. 字体
+    * 数字的字体
+    * 游戏结束后弹出屏幕的字体
+6. 玩家的昵称  
+
+在开始编写JSON配置文件之前，我们还需要知道Pygame模块都支持哪些字体。
+我们可以通过指令行来获取这些字体的名称，在这里以Linux环境下bash举例:
+```bash
+$ python3 > pygameFonts.txt
+Python 3.8.2 (default, Apr 27 2020, 15:53:34) 
+[GCC 9.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pygame
+pygame 1.9.6
+Hello from the pygame community. https://www.pygame.org/contribute.html
+>>> pygame.init()
+>>> print(pygame.font.get_fonts())
+```
+然后查看pygameFonts.txt文件就可以知道哪些字体可以使用了。
+接着根据获取到的字体编写JSON设置文件，setting.json:
+```json
+{
+    "size": 15,
+    "number of mine": "default", 
+    "level": 2,
+    "color": {
+        "background": "#cd5c5c",
+        "boom": "#e74c3c",
+        "revealed_blank": "#eaeded",
+        "flag": "#5b2c6f",
+        "text": "#000000"
+    },
+    "font": {
+        "number_font": "arialblack",
+        "text_font": "lucidaconsole"
+    },
+    "player": "EEEH"
+}
+```
 
 ### 7.3.4 Python中的json模块
+json模块的初步运用其实很简单，只需要遵循一下一个步骤:
+1. 打开setting.json文件
+2. 根据setting.json文件创建json对象
+3. 根据key读取需要的value
+```Python
+# functions.py
+import json
+
+# load setting
+settingFile = open("settings.json")
+setting = json.load(settingFile)
+
+# read values based on key-value pair 
+boomColor = setting["color"]["boom"]
+blankColor = setting["color"]["revealed_blank"]
+flagColor = setting["color"]["flag"]
+numFont = setting["font"]["number_font"]
+size = setting["size"]
+```
 
 
 

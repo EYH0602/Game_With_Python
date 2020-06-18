@@ -1,7 +1,7 @@
 {
     "size": 15,
-    "level": 2,
     "number of mine": "default", 
+    "level": 2,
     "color": {
         "background": "#cd5c5c",
         "boom": "#e74c3c",
@@ -13,5 +13,5 @@
         "number_font": "arialblack",
         "text_font": "lucidaconsole"
     },
-    "player": "Ethan"
+    "player": "EEEH"
 }

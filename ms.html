@@ -547,9 +547,9 @@ print(fruit_list.__sizeof__())
 <h2 id="72-pygame-%E9%80%9A%E8%BF%87%E9%BC%A0%E6%A0%87%E7%9A%84%E4%BA%BA%E6%9C%BA%E4%BA%A4%E4%BA%92">7.2 Pygame 通过鼠标的人机交互</h2>
 <p>在上一章，我们学习了Pygame模块的基础功能，比如设置游戏屏幕，键盘交互，绘制图形等。
 在这一章，因为扫雷不能用只用键盘来玩，我们将要学习如何通过鼠标点击与计算机交互。
-在讨论通过鼠标的Pygame人机交互以前，我们先来认识一下常规鼠标的构造。
-<img src="pics/Logitech M325.jpeg" alt="Logitech M325" title="Logitech M325">
-从图片可以看出，普通鼠标的正面（上面）有三个按键。从左到右，把它们标号为1,2,3。</p>
+在讨论通过鼠标的Pygame人机交互以前，我们先来认识一下常规鼠标的构造。</p>
+<img src="pics/Logitech%20M325.jpeg" alt="Logitech M325" width="150" height="150"/>
+<p>从图片可以看出，普通鼠标的正面（上面）有三个按键。从左到右，把它们标号为1,2,3。</p>
 <table>
 <thead>
 <tr>
@@ -606,10 +606,123 @@ JSON文件格式可以很好的描述面对对象的程序设计理念，更加�
 比如Python的json模块，C++的Json::Value库</li>
 </ul>
 <p>由于这三个特性，JSON经常被用于软件的设置文件，比如笔者常用的Visual Studio Code和Microsoft Terminal;
-以及客户端与服务器之间的通讯，比如C++的cppjsonrpc库。</p>
-<h3 id="731-json%E5%9C%A8%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8">7.3.1 JSON在设置文件中的应用</h3>
-<h3 id="732-json%E5%9C%A8%E7%A8%8B%E5%BA%8Fapi%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8">7.3.2 JSON在程序API设计中的应用</h3>
+以及客户端与服务器之间的通讯，比如C++的jsoncpprpc库。</p>
+<h3 id="731-json%E8%AF%AD%E6%B3%95">7.3.1 JSON语法</h3>
+<p>JSON文件有至少组key-value pair组成。
+其中的key指一个对象的名字，它必须是字符串。
+其中的value值对象的值，它可以使任何类型。
+如果value是不同类型，我们直接写出它就行。
+如果value是列表，我们需要把元素写在[]中，与Python一样。
+如果value是一个对象，我们需要把它写在{}中。</p>
+<p>如果JSON包含多组key-value pair的话，我们需要用','将他们分隔开。
+最后一组key-value pair后面不能有','。
+下面会展示一个例子，使用JSON来描述一个课程。</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// course.json</span>
+{
+	<span class="hljs-attr">"name"</span>: <span class="hljs-string">"Python Programming in Games"</span>,
+	<span class="hljs-attr">"id"</span>: <span class="hljs-string">"123456"</span>,
+	<span class="hljs-attr">"chapters"</span>: [
+		<span class="hljs-comment">// ...</span>
+		<span class="hljs-string">"chapter 6"</span>: <span class="hljs-string">"Connect 4"</span>,
+		<span class="hljs-string">"chapter 7"</span>: <span class="hljs-string">"Minesweeper"</span>
+		<span class="hljs-comment">// .. many more chapters</span>
+	],
+	<span class="hljs-attr">"this chapter"</span>: {
+		<span class="hljs-attr">"number"</span>: <span class="hljs-number">7</span>,
+		<span class="hljs-attr">"name"</span>: <span class="hljs-string">"Minesweeper"</span>,
+		<span class="hljs-attr">"subsections"</span>: [
+			<span class="hljs-string">"7.1"</span>: <span class="hljs-string">"Tuple"</span>,
+			<span class="hljs-string">"7.2"</span>: <span class="hljs-string">"JSON"</span>,
+			<span class="hljs-string">"7.3"</span>: <span class="hljs-string">"Regular Expression"</span>,
+			<span class="hljs-string">"7.4"</span>: <span class="hljs-string">"DFS in 2D Array"</span>,
+			<span class="hljs-string">"7.5"</span>: <span class="hljs-string">"Minesweeper Program"</span>
+		]
+	}
+}
+</div></code></pre>
+<p>这段JSON所表示的对面在Python是如何体现的呢？</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Chapter</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, number, name, subsections)</span>:</span>
+        <span class="hljs-comment"># number: int, name: string, subsections: List[string]</span>
+        self.chapNumber = number
+        self.name = name
+        self.subsections = subsections;
+        
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Course</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, name, courseID, chapters, thisChapter)</span>:</span>
+        <span class="hljs-comment"># name: string, courseID: string, chapters: List[string], thisChapter: Chapter</span>
+        self.name = name
+        self.courseID = courseID
+        self.chapters = chapters
+        self.thisChapter = thisChapter
+
+thisChapter = Chapter(<span class="hljs-number">7</span>, <span class="hljs-string">'Minesweeper'</span>,
+                    [<span class="hljs-string">'Tuple'</span>, <span class="hljs-string">'JSON'</span>, <span class="hljs-string">'Regular Expression'</span>, \
+                    <span class="hljs-string">'DFS in 2D Array'</span>, <span class="hljs-string">'Minesweeper Program'</span>])
+
+thisCourse = Course(<span class="hljs-string">'Python Programming in Games'</span>, <span class="hljs-string">'123456'</span>, \
+                    [..., <span class="hljs-string">'Connect 4'</span>, <span class="hljs-string">'Minesweeper'</span>, ...], \
+                    thisChapter)
+</div></code></pre>
+<h3 id="732-json%E5%9C%A8%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8">7.3.2 JSON在设置文件中的应用</h3>
+<p>在这个小结，我们将阅读Windows Terminal设置文件用的一个节选片段。
+然后解释这个设置文件中每组key-value pair的意义。解释见代码注释。</p>
+<pre class="hljs"><code><div>{
+	<span class="hljs-comment">// Add custom color schemes to this array.</span>
+    <span class="hljs-comment">// To learn more about color schemes, visit https://aka.ms/terminal-color-schemes</span>
+	<span class="hljs-attr">"scheme"</span>:
+	[
+		{
+            <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Breeze"</span>,
+            <span class="hljs-attr">"black"</span>: <span class="hljs-string">"#12181d"</span>,	<span class="hljs-comment">// a color in rgb hexadecimal format</span>
+            <span class="hljs-attr">"red"</span>: <span class="hljs-string">"#eb5b5b"</span>,
+            <span class="hljs-attr">"green"</span>: <span class="hljs-string">"#bfeea4"</span>,
+            <span class="hljs-attr">"yellow"</span>: <span class="hljs-string">"#fc8162"</span>,
+            <span class="hljs-attr">"blue"</span>: <span class="hljs-string">"#6eb7eb"</span>,
+            <span class="hljs-attr">"purple"</span>: <span class="hljs-string">"#9b59b6"</span>,
+            <span class="hljs-attr">"cyan"</span>: <span class="hljs-string">"#1abc9c"</span>,
+            <span class="hljs-attr">"white"</span>: <span class="hljs-string">"#eff0f1"</span>,
+            <span class="hljs-attr">"brightBlack"</span>: <span class="hljs-string">"#d8e3e4"</span>,
+            <span class="hljs-attr">"brightRed"</span>: <span class="hljs-string">"#c0392b"</span>,
+            <span class="hljs-attr">"brightGreen"</span>: <span class="hljs-string">"#1cdc9a"</span>,
+            <span class="hljs-attr">"brightYellow"</span>: <span class="hljs-string">"#fdbc4b"</span>,
+            <span class="hljs-attr">"brightBlue"</span>: <span class="hljs-string">"#3daee9"</span>,
+            <span class="hljs-attr">"brightPurple"</span>: <span class="hljs-string">"#57b4df"</span>,
+            <span class="hljs-attr">"brightCyan"</span>: <span class="hljs-string">"#62dd69"</span>,
+            <span class="hljs-attr">"brightWhite"</span>: <span class="hljs-string">"#fcfcfc"</span>,
+            <span class="hljs-attr">"background"</span>: <span class="hljs-string">"#31363b"</span>,
+            <span class="hljs-attr">"foreground"</span>: <span class="hljs-string">"#eff0f1"</span>
+        }
+	],
+
+	<span class="hljs-comment">// Add custom keybindings to this array.</span>
+    <span class="hljs-comment">// To unbind a key combination from your defaults.json, set the command to "unbound".</span>
+    <span class="hljs-comment">// To learn more about keybindings, visit https://aka.ms/terminal-keybindings</span>
+	<span class="hljs-attr">"keybindings"</span>:
+	[
+		<span class="hljs-comment">// Copy and paste are bound to Ctrl+Shift+C and Ctrl+Shift+V in your defaults.json.</span>
+        <span class="hljs-comment">// These two lines additionally bind them to Ctrl+C and Ctrl+V.</span>
+        <span class="hljs-comment">// To learn more about selection, visit https://aka.ms/terminal-selection</span>
+        { <span class="hljs-attr">"command"</span>: {<span class="hljs-attr">"action"</span>: <span class="hljs-string">"copy"</span>, <span class="hljs-attr">"singleLine"</span>: <span class="hljs-literal">false</span> }, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+c"</span> },
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"paste"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+v"</span> },
+
+        <span class="hljs-comment">// Press Ctrl+Shift+F to open the search box</span>
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"find"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+shift+f"</span> },
+
+        <span class="hljs-comment">// Press ctrl+shift+. to open a new pane.</span>
+        <span class="hljs-comment">// - "split": "auto" makes this pane open in the direction that provides the most surface area.</span>
+        <span class="hljs-comment">// - "splitMode": "duplicate" makes the new pane use the focused pane's profile.</span>
+        <span class="hljs-comment">// To learn more about panes, visit https://aka.ms/terminal-panes</span>
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"splitPane"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+shift+."</span> },
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"closePane"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+shift+,"</span>},
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"newTab"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+shift+a"</span> },
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"closeTab"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+shift+z"</span>},
+        { <span class="hljs-attr">"command"</span>: <span class="hljs-string">"nextTab"</span>, <span class="hljs-attr">"keys"</span>: <span class="hljs-string">"ctrl+tab"</span> }
+	]
+}
+</div></code></pre>
 <h3 id="733-%E7%BC%96%E5%86%99minesweeper%E6%B8%B8%E6%88%8F%E7%9A%84json%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6">7.3.3 编写Minesweeper游戏的JSON设置文件</h3>
+<h3 id="734-python%E4%B8%AD%E7%9A%84json%E6%A8%A1%E5%9D%97">7.3.4 Python中的json模块</h3>
 <h2 id="74-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-regular-expression">7.4 正则表达式 Regular Expression</h2>
 <h2 id="75-%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">7.5 二维数组的深度优先搜索</h2>
 <h2 id="76-minesweeper-%E6%B8%B8%E6%88%8F%E7%BC%96%E5%86%99">7.6 Minesweeper 游戏编写</h2>
