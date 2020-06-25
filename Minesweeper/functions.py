@@ -24,16 +24,16 @@ def printBoard(board):
 def dfs(board, x, y):
     if not re.search("^.E*$", board[x][y]):
         return
-    dx = [0,0,1,1,1,-1,-1,-1]   # move in x direction
-    dy = [1,-1,0,1,-1,0,-1,1]   # move in y direction
+    dx = (0,0,1,1,1,-1,-1,-1)   # move in x direction
+    dy = (1,-1,0,1,-1,0,-1,1)   # move in y direction
     count = 0;
     
     # find out how many is around this cell
     for i in range(0,8):
         newx = x+dx[i]
         newy = y+dy[i]
-        if newx < 0 or newy < 0 or\
-             newx >= len(board) or newy >= len(board[0]):
+        if newx < 0 or newy < 0 or \
+            newx >= len(board) or newy >= len(board[0]):
             continue
         if board[newx][newy] == 'M' or board[newx][newy] == 'MF':
             count += 1
@@ -43,7 +43,7 @@ def dfs(board, x, y):
         return
     
     # draw out the region
-    board[x][y] = 'B'
+    board[x][y] = 'B'   # mark this pos
     for i in range(0,8):
         newx = x+dx[i]
         newy = y+dy[i]
