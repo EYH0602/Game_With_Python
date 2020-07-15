@@ -4,29 +4,29 @@
 * To run these games, you need to have pygame installed first.
 
 ## To get these code:
-'''shell
+```shell
 $ git clone https://github.com/EYH0602/Game_With_Python
-'''
+```
 
 ## To install pygame:
 #### Ubuntu:
-'''shell
+```shell
 $ sudo apt update  
 $ sudo apt install python3-pygame  
-'''
+```
 
 #### Windows 10:
-'''shell
+```shell
 py -m pip install -U pygame --user
-'''
+```
 
 #### Mac:
-'''shell
+```shell
 python3 -m pip install -U pygame --user
-'''
+```
 
 
 ## To run the game:
-'''shell
+```shell
 $ python3 <game_name>.py
-'''
+```
